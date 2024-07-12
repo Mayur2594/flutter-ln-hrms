@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:ln_hrms/controllers/controller.authentication.dart';
 import 'package:ln_hrms/controllers/controller.common.dart';
+import 'package:ln_hrms/main.dart';
 import 'package:ln_hrms/views/view.forgotpassword.dart';
 
 final AuthenticationController AuthCtrl = Get.put(AuthenticationController());
@@ -142,7 +143,7 @@ class AuthenticationView extends StatelessWidget {
                                   if (AuthCtrl.formKey.currentState
                                           ?.validate() ??
                                       false) {
-                                    AuthCtrl.authenticateUser();
+                                    AuthCtrl.authenticateUser(context);
                                   }
                                 },
                                 child: const Padding(

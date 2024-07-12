@@ -1,16 +1,14 @@
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ln_hrms/helpers/helper.config.dart';
 
 class AuthenticationService {
-  static const String baseUrl = 'https://threesainfoway.net:8896';
-
   // ignore: non_constant_identifier_names
   Future<Map<String, dynamic>> authenticateEmployee(var EmployeeDetails) async {
-    print(EmployeeDetails);
     final response = await http.post(
-        Uri.parse('$baseUrl/api/authenticateEmployee'),
+        Uri.parse('${Config.baseUrl}/api/authenticateEmployee'),
         body: EmployeeDetails);
-    print(response);
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {

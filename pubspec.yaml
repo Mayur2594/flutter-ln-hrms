@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.6
   flutter_svg_provider: ^1.0.7
   http: ^1.2.1
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +66,7 @@ flutter:
   assets:
     - lib/assets/svg/
     - lib/assets/png/
+    - lib/assets/gif/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

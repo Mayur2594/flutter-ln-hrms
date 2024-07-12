@@ -1,26 +1,44 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ln_hrms/models/model.menulists.dart';
-import 'package:ln_hrms/router/pages.dart';
-import 'package:ln_hrms/views/view.authentication.dart';
-import 'package:ln_hrms/views/view.forgotpassword.dart';
-import 'package:ln_hrms/views/view.attendance.dart';
-import 'package:ln_hrms/views/view.onduty.dart';
-import 'package:ln_hrms/views/view.leaves.dart';
-import 'package:ln_hrms/views/view.attendance_regularisation.dart';
-import 'package:ln_hrms/views/view.contacts.dart';
-import 'package:ln_hrms/views/view.dahboard.dart';
-import 'package:ln_hrms/views/view.profile.dart';
-import 'package:ln_hrms/views/view.salary.dart';
-import 'package:ln_hrms/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CommonController extends GetxController {
-  redirectToPage(String pageURL) {
-    // ignore: non_constant_identifier_names
-    List<MenuList> PagesList = registeredPages
-        .where((pgs) => pgs.url == pageURL.toString().trim())
-        .toList();
-    print(PagesList[0]);
-    Get.to(PagesList[0].view);
+  Future<void> saveDetailsInSharedPref(keyname, data) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      switch (data.runtimeType) {
+        case int:
+          {
+            prefs.setString(keyname, data.toString().trim());
+          }
+        case String:
+          {
+            prefs.setString(keyname, data.toString().trim());
+          }
+        default:
+          {
+            prefs.setString(keyname, json.encode(data).toString().trim());
+          }
+      }
+    } catch (ex) {
+      print('Exception in saveDetailsInSharedPref $ex');
+    }
+  }
+
+  Future<String?> getDetailsFromSharedPref(keyname) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      var value = prefs.getString(keyname);
+      if (value != null) {
+        return value;
+      }
+      return "";
+    } catch (ex) {
+      print("Exception in getDetailsFromSharedPref ${ex}");
+      return "";
+    }
   }
 }

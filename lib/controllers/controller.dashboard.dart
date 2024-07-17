@@ -121,9 +121,8 @@ class DashboardController extends GetxController {
                                 children: [
                                   Text(
                                     "${item['employee_name'] ?? ""}",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineSmall,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
                                   ),
                                   Text(
                                     "${item['review'].toString()}",

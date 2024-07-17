@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
 import 'package:ln_hrms/controllers/controller.common.dart';
 import 'package:get/get.dart';

@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +22,8 @@ class DashboardView extends StatelessWidget {
               borderRadius: BorderRadius.circular(0), // Edge-to-edge
             ),
             elevation: 6,
-            shadowColor: Colors.grey,
+            color: Colors.white,
+            shadowColor: Colors.white,
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.all(10),
@@ -97,7 +101,7 @@ class DashboardView extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Divider(),
+                            const Divider(),
                             Row(
                               children: [
                                 Expanded(
@@ -161,7 +165,7 @@ class DashboardView extends StatelessWidget {
                                         child: Column(
                                           children: [
                                             Image.asset(
-                                              'gif/fingerprint.gif',
+                                              'lib/assets/gif/fingerprint.gif',
                                               fit: BoxFit.cover,
                                             ),
                                             Text('PUNCH',
@@ -180,7 +184,7 @@ class DashboardView extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return const Column(
+                  return Column(
                     children: [Text("No Records Found")],
                   );
                 }
@@ -197,8 +201,8 @@ class DashboardView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         children: [
-          Text(title, style: TextStyle(color: Colors.grey)),
-          Text(value ?? "", style: TextStyle(fontSize: 16)),
+          Text(title, style: const TextStyle(color: Colors.grey)),
+          Text(value ?? "", style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
@@ -210,7 +214,7 @@ class FullScreenDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: EdgeInsets.all(0),
+      insetPadding: const EdgeInsets.all(0),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -221,16 +225,16 @@ class FullScreenDialog extends StatelessWidget {
               automaticallyImplyLeading: false,
               actions: [
                 IconButton(
-                  icon: Icon(Icons.close),
+                  icon: const Icon(Icons.close),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                 ),
               ],
             ),
-            Expanded(
-              child: Center(
-                child: Text('This is a full screen dialog'),
+            const Expanded(
+              child: const Center(
+                child: const Text('This is a full screen dialog'),
               ),
             ),
           ],

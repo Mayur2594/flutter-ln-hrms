@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ln_hrms/models/model.menulists.dart';
 import 'package:ln_hrms/router/pages.dart';
-import 'package:ln_hrms/views/view.attendance.dart';
-import 'package:ln_hrms/views/view.contacts.dart';
 import 'package:ln_hrms/views/view.dahboard.dart';
-import 'package:ln_hrms/views/view.profile.dart';
-import 'package:ln_hrms/views/view.salary.dart';
 
 void main() {
   runApp(MyApp());
@@ -38,9 +34,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
   var selectedPageTitle = "Home";
-  int _selecteTabdIndex = 0;
   Widget _selectedView = DashboardView();
 
   void _onItemTapped(MenuItem _menuitem) {
@@ -55,7 +49,6 @@ class _MainScreenState extends State<MainScreen> {
 
   void _onTabItemTapped(int index) {
     setState(() {
-      _selecteTabdIndex = index;
       selectedPageTitle = tabMenuItems[index].title;
       _selectedView = tabMenuItems[index].view;
     });
@@ -79,20 +72,34 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(selectedPageTitle.toString().toUpperCase()),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFFeaafc8),
-                Color(0xFF654ea3),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+          title: Text(
+            selectedPageTitle.toString().toUpperCase(),
+            style: const TextStyle(color: Colors.white),
+          ),
+          iconTheme: const IconThemeData(color: Colors.white),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFFeaafc8),
+                  Color(0xFF654ea3),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
           ),
-        ),
-      ),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.notifications),
+              color: Colors.white,
+              tooltip: 'Show Snackbar',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('This is a snackbar')));
+              },
+            ),
+          ]),
       drawer: Drawer(
         child: Column(
           children: <Widget>[

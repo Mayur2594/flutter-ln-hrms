@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:device_uuid/device_uuid.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:ln_hrms/customwidgets/widget.applayout.dart';
+import 'package:ln_hrms/helpers/helper.config.dart';
 import 'package:ln_hrms/models/model.authentication.dart';
-import 'package:ln_hrms/main.dart';
+import 'package:ln_hrms/views/view.dahboard.dart';
 import 'package:ln_hrms/controllers/controller.common.dart';
 import 'package:ln_hrms/services/service.authentication.dart';
 
@@ -70,7 +72,7 @@ class AuthenticationController extends GetxController {
         "name": data["name"],
         "_id": data["_id"]
       });
-      Get.to(MainScreen());
+      Get.to(DashboardView());
     } else {
       // return {"success": data["success"], "message": data["message"]};
       final snackBar = SnackBar(
@@ -97,7 +99,8 @@ class AuthenticationController extends GetxController {
         "name": data["name"],
         "_id": data["_id"]
       });
-      Get.to(MainScreen());
+
+      Get.to(DashboardView());
     } else {
       print(data);
     }

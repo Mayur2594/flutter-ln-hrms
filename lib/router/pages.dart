@@ -15,7 +15,7 @@ import "package:ln_hrms/models/model.menulists.dart";
 
 final List<GetPage> appPages = [
   GetPage(name: '/', page: () => AuthenticationView()),
-  GetPage(name: '/MainScreen', page: () => MainScreen()),
+  // GetPage(name: '/MainScreen', page: () => MainScreen()),
   GetPage(name: '/MainScreen/attenednace', page: () => AttendanceView()),
   GetPage(name: '/MainScreen/onduty', page: () => OndutyView()),
   GetPage(name: '/MainScreen/leaves', page: () => LeaveView()),

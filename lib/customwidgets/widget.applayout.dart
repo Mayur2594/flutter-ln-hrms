@@ -50,7 +50,7 @@ class DrawerView extends StatelessWidget {
   DrawerView();
   void _onItemTapped(MenuItem _menuitem) {
     Config().setPageTitle(_menuitem.title);
-    Get.to(_menuitem.view);
+    Get.toNamed(_menuitem.url);
   }
 
   @override

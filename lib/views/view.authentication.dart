@@ -6,11 +6,11 @@ import 'package:ln_hrms/controllers/controller.common.dart';
 import 'package:ln_hrms/main.dart';
 import 'package:ln_hrms/views/view.forgotpassword.dart';
 
-final AuthenticationController AuthCtrl = Get.put(AuthenticationController());
-
 class PasssowrdFieldView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // ignore: non_constant_identifier_names
+    final AuthenticationController AuthCtrl = Get.find();
     return Obx(() {
       return TextFormField(
         controller: AuthCtrl.passwordController,
@@ -48,6 +48,7 @@ class AuthenticationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: non_constant_identifier_names
+    final AuthenticationController AuthCtrl = Get.find();
     return PopScope(
         canPop: false,
         child: Scaffold(

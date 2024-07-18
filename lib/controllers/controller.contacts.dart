@@ -17,7 +17,6 @@ class ContactsController extends GetxController {
       var result = await EmployeeService().officeContacts();
       contactsList(json.decode(result));
       filteredContactsList.value = contactsList;
-      print(filteredContactsList.value);
     } catch (ex) {
       print("Exception in controller dasboard officeContacts: $ex");
     }

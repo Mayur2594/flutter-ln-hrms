@@ -10,35 +10,44 @@ import 'package:ln_hrms/views/view.contacts.dart';
 import 'package:ln_hrms/views/view.dahboard.dart';
 import 'package:ln_hrms/views/view.profile.dart';
 import 'package:ln_hrms/views/view.salary.dart';
-import 'package:ln_hrms/main.dart';
 import "package:ln_hrms/models/model.menulists.dart";
+import "package:ln_hrms/bindings/binding.dart";
 
 final List<GetPage> appPages = [
-  GetPage(name: '/', page: () => AuthenticationView()),
-  // GetPage(name: '/MainScreen', page: () => MainScreen()),
-  GetPage(name: '/MainScreen/attenednace', page: () => AttendanceView()),
-  GetPage(name: '/MainScreen/onduty', page: () => OndutyView()),
-  GetPage(name: '/MainScreen/leaves', page: () => LeaveView()),
   GetPage(
-      name: '/MainScreen/attenednace-regularisation',
+      name: '/',
+      page: () => AuthenticationView(),
+      binding: AuthenticationBinding()),
+  // GetPage(name: '/MainScreen', page: () => MainScreen()),
+  GetPage(name: '/attenednace', page: () => AttendanceView()),
+  GetPage(name: '/onduty', page: () => OndutyView()),
+  GetPage(name: '/leaves', page: () => LeaveView()),
+  GetPage(
+      name: '/attenednace-regularisation',
       page: () => AttendanceRegularisationView()),
-  GetPage(name: '/MainScreen/dashboard', page: () => DashboardView()),
-  GetPage(name: '/MainScreen/contacts', page: () => ContactsView()),
-  GetPage(name: '/MainScreen/salary', page: () => SalaryView()),
-  GetPage(name: '/MainScreen/profile', page: () => ProfileView()),
+  GetPage(
+      name: '/dashboard',
+      page: () => DashboardView(),
+      binding: DashboardBinding()),
+  GetPage(
+      name: '/contacts',
+      page: () => ContactsView(),
+      binding: ContactsBinding()),
+  GetPage(name: '/salary', page: () => SalaryView()),
+  GetPage(name: '/profile', page: () => ProfileView()),
 ];
 
 final List<MenuItem> drawerMenuItems = [
   MenuItem(
     title: 'Home',
-    url: '/MainScreen/dashboard',
+    url: '/dashboard',
     icon: Icons.home,
     view: DashboardView(),
     description: 'Go to home page',
   ),
   MenuItem(
     title: 'Contacts',
-    url: '/MainScreen/contacts',
+    url: '/contacts',
     icon: Icons.book,
     view: ContactsView(),
     description: 'Learn more about us',
@@ -51,28 +60,28 @@ final List<MenuItem> drawerMenuItems = [
     subMenuItems: [
       MenuItem(
         title: 'Att. Records',
-        url: '/MainScreen/attenednace',
+        url: '/attenednace',
         icon: Icons.donut_large,
         description: 'View your Attendance Records',
         view: AttendanceView(),
       ),
       MenuItem(
         title: 'Att. Regularisation',
-        url: '/MainScreen/attenednace-regularisation',
+        url: '/attenednace-regularisation',
         icon: Icons.donut_large,
         description: 'View your Attendance Regularisation Records',
         view: AttendanceRegularisationView(),
       ),
       MenuItem(
         title: 'On Duty',
-        url: '/MainScreen/onduty',
+        url: '/onduty',
         icon: Icons.donut_large,
         description: 'View your Onduty Regularisation Records',
         view: OndutyView(),
       ),
       MenuItem(
         title: 'Leaves',
-        url: '/MainScreen/leaves',
+        url: '/leaves',
         icon: Icons.donut_large,
         description: 'View your Leaves Records',
         view: LeaveView(),
@@ -82,14 +91,14 @@ final List<MenuItem> drawerMenuItems = [
   ),
   MenuItem(
     title: 'Salary',
-    url: '/MainScreen/salary',
+    url: '/salary',
     icon: Icons.wallet,
     view: SalaryView(),
     description: 'Adjust your preferences',
   ),
   MenuItem(
     title: 'Profile',
-    url: '/MainScreen/profile',
+    url: '/profile',
     icon: Icons.person,
     view: ProfileView(),
     description: 'View your profile',
@@ -99,28 +108,28 @@ final List<MenuItem> drawerMenuItems = [
 final List<MenuItem> tabMenuItems = [
   MenuItem(
     title: 'Home',
-    url: '/MainScreen/dashboard',
+    url: '/dashboard',
     icon: Icons.home,
     view: DashboardView(),
     description: 'Go to home page',
   ),
   MenuItem(
     title: 'Contacts',
-    url: '/MainScreen/contacts',
+    url: '/contacts',
     icon: Icons.book,
     view: ContactsView(),
     description: 'Learn more about us',
   ),
   MenuItem(
     title: 'Salary',
-    url: '/MainScreen/salary',
+    url: '/salary',
     icon: Icons.wallet,
     view: SalaryView(),
     description: 'Adjust your preferences',
   ),
   MenuItem(
     title: 'Profile',
-    url: '/MainScreen/profile',
+    url: '/profile',
     icon: Icons.person,
     view: ProfileView(),
     description: 'View your profile',
@@ -133,36 +142,36 @@ final List<MenuList> registeredPages = [
     view: ForgotPasssowrdView(),
   ),
   MenuList(
-    url: '/MainScreen/dashboard',
+    url: '/dashboard',
     view: DashboardView(),
   ),
   MenuList(
-    url: '/MainScreen/contacts',
+    url: '/contacts',
     view: ContactsView(),
   ),
-  MenuList(url: '/MainScreen/profile', view: ProfileView()),
+  MenuList(url: '/profile', view: ProfileView()),
   MenuList(
-    url: '/MainScreen/salary',
+    url: '/salary',
     view: SalaryView(),
   ),
   MenuList(
-    url: '/MainScreen/attenednace',
+    url: '/attenednace',
     view: AttendanceView(),
   ),
   MenuList(
-    url: '/MainScreen/attenednace-regularisation',
+    url: '/attenednace-regularisation',
     view: AttendanceRegularisationView(),
   ),
   MenuList(
-    url: '/MainScreen/onduty',
+    url: '/onduty',
     view: OndutyView(),
   ),
   MenuList(
-    url: '/MainScreen/leaves',
+    url: '/leaves',
     view: LeaveView(),
   ),
   MenuList(
-    url: '/MainScreen/leaves',
+    url: '/leaves',
     view: LeaveView(),
   ),
 ];

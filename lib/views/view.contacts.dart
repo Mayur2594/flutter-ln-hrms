@@ -5,10 +5,9 @@ import 'package:ln_hrms/customwidgets/widget.applayout.dart';
 import 'package:ln_hrms/helpers/helper.config.dart';
 
 class ContactsView extends StatelessWidget {
-  final ContactsController contactsCtrl = Get.put(ContactsController());
-
   @override
   Widget build(BuildContext context) {
+    final ContactsController contactsCtrl = Get.find();
     return Scaffold(
       appBar: AppBarView(),
       drawer: DrawerView(),
@@ -42,6 +41,7 @@ class ContactsView extends StatelessWidget {
                   itemCount: contactsCtrl.filteredContactsList.value.length,
                   separatorBuilder: (context, index) => Divider(),
                   itemBuilder: (context, index) {
+                    // ignore: invalid_use_of_protected_member
                     final item = contactsCtrl.filteredContactsList.value[index];
                     return ListTile(
                       leading: CircleAvatar(

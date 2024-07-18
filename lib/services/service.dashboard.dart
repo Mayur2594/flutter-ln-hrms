@@ -42,4 +42,21 @@ class DashboardService {
           "{'status': false, 'message': 'Somthing went wrong, Please try Again!'}");
     }
   }
+
+  Future getBirthdaysInCurrentWeek() async {
+    var _token = await CommonCtrl.getDetailsFromSharedPref("token");
+
+    final response = await http.get(
+      Uri.parse('${Config.baseUrl}/api/getBirthdaysInCurrentWeek'),
+      headers: {
+        'Authorization': 'Bearer $_token',
+      },
+    );
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return json.decode(
+          "{'status': false, 'message': 'Somthing went wrong, Please try Again!'}");
+    }
+  }
 }

@@ -1,12 +1,9 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:device_uuid/device_uuid.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:ln_hrms/helpers/helper.config.dart';
 import 'package:ln_hrms/models/model.authentication.dart';
 import 'package:ln_hrms/controllers/controller.common.dart';
 import 'package:ln_hrms/services/service.authentication.dart';
@@ -40,7 +37,7 @@ class AuthenticationController extends GetxController {
     try {
       uuid.value = await _deviceUUID.getUUID() ?? 'Unknown UUID';
       print("uuid: ${uuid.value}");
-      if (uuid.value.toString().trim().length > 0 &&
+      if (uuid.value.toString().trim().isNotEmpty &&
           uuid.value.toString().trim() != 'Unknown UUID') {
         authenticateUserWithUUID();
       }

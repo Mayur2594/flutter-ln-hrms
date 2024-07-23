@@ -9,11 +9,11 @@ class EmployeeService {
   final CommonController CommonCtrl = Get.put(CommonController());
 
   Future officeContacts() async {
-    var _token = await CommonCtrl.getDetailsFromSharedPref("token");
+    var token = await CommonCtrl.getDetailsFromSharedPref("token");
 
     final response = await http
         .get(Uri.parse('${Config.baseUrl}/api/officeContacts'), headers: {
-      'Authorization': 'Bearer $_token',
+      'Authorization': 'Bearer $token',
     });
     if (response.statusCode == 200) {
       return response.body;

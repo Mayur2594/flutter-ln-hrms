@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:ln_hrms/controllers/controller.authentication.dart';
 import 'package:ln_hrms/controllers/controller.common.dart';
 
 class ForgotPasssowrdView extends StatelessWidget {
+  const ForgotPasssowrdView({super.key});
+
   @override
   Widget build(BuildContext context) {
     Get.put(AuthenticationController());

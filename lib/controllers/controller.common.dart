@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,7 +36,7 @@ class CommonController extends GetxController {
       }
       return "";
     } catch (ex) {
-      print("Exception in getDetailsFromSharedPref ${ex}");
+      print("Exception in getDetailsFromSharedPref $ex");
       return "";
     }
   }

@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import "package:ln_hrms/helpers/helper.config.dart";
 import 'package:ln_hrms/controllers/controller.dashboard.dart';
@@ -247,7 +246,9 @@ class DashboardView extends StatelessWidget {
                                                     (BuildContext context) {
                                                   return const FullScreenDialog();
                                                 },
-                                              );
+                                              ).then((_) {
+                                                DashboardCtrl.refreshView();
+                                              });
                                             },
                                             child: Column(
                                               children: [
@@ -408,26 +409,6 @@ class FullScreenDialog extends StatelessWidget {
     DashboardCtrl.checkInternetStatus();
     DashboardCtrl.getCurrentPosition();
     return Dialog(
-<<<<<<< HEAD
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.all(0),
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Colors.white,
-        child: Column(
-          children: [
-            AppBar(),
-            const Expanded(
-              child: const Center(
-                child: const Text('This is a full screen dialog'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-=======
         backgroundColor: Colors.white,
         insetPadding: const EdgeInsets.all(0),
         child: Obx(
@@ -530,7 +511,7 @@ class FullScreenDialog extends StatelessWidget {
                           alignment: Alignment.center,
                           child: DashboardCtrl.currentPosition != null
                               ? GoogleMap(
-                                  mapType: MapType.terrain,
+                                  mapType: MapType.normal,
                                   markers: DashboardCtrl.markers.toSet(),
                                   circles: DashboardCtrl.circle.toSet(),
                                   initialCameraPosition: CameraPosition(
@@ -540,7 +521,7 @@ class FullScreenDialog extends StatelessWidget {
                                               .currentPosition!.latitude,
                                           DashboardCtrl
                                               .currentPosition!.longitude)))
-                              : const Text("Something went wrong!"),
+                              : const Text("Map is loading...!"),
                         ),
                         const Divider(),
                         Row(
@@ -591,13 +572,22 @@ class FullScreenDialog extends StatelessWidget {
                           ],
                         ),
                         Container(
-                          child: DashboardCtrl.attendanceStatus != null
+                          // ignore: unnecessary_null_comparison
+                          child: DashboardCtrl.attendanceStatus.isNotEmpty &&
+                                  DashboardCtrl.attendanceStatus != null
                               ? Row(
                                   children: [
                                     Expanded(
                                         flex: 10,
                                         child: Text(
                                           "${DashboardCtrl.attendanceStatus['message']}",
+                                          style: TextStyle(
+                                              color: DashboardCtrl
+                                                              .attendanceStatus[
+                                                          'type'] ==
+                                                      'success'
+                                                  ? Colors.green
+                                                  : Colors.red),
                                         ))
                                   ],
                                 )
@@ -622,24 +612,41 @@ class FullScreenDialog extends StatelessWidget {
                       child: MaterialButton(
                         elevation: 6,
                         onPressed: () {
-                          DashboardCtrl.setAttendance();
+                          DashboardCtrl.punchingInpregress.value == true
+                              ? null
+                              : DashboardCtrl.setAttendance(context);
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 6.0, vertical: 6.0),
                           child: Column(
                             children: [
                               Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Confirm",
-                                  style: TextStyle(
-                                    color: Color.fromARGB(235, 255, 255, 255),
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              )
+                                  alignment: Alignment.center,
+                                  child: Obx(() {
+                                    return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            DashboardCtrl.punchingInpregress
+                                                        .value ==
+                                                    true
+                                                ? "Attendance Punching "
+                                                : "Confirm",
+                                            style: TextStyle(
+                                              color: DashboardCtrl
+                                                          .punchingInpregress
+                                                          .value ==
+                                                      true
+                                                  ? Colors.white30
+                                                  : Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ]);
+                                  }))
                             ],
                           ),
                         ),
@@ -651,6 +658,5 @@ class FullScreenDialog extends StatelessWidget {
             ),
           ),
         ));
->>>>>>> d945b0a7d053ea1efbe24d3b48c54f8829792be4
   }
 }

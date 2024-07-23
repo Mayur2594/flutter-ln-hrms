@@ -46,7 +46,7 @@ class DashboardController extends GetxController
   var EmployeeBirthdaysWidget = Rx<Widget>(Container());
   late AnimationController animationController;
   var isProcesing = false.obs;
-
+  var punchingInpregress = false.obs;
   @override
   void onInit() {
     getLocalStorageDetails();
@@ -57,6 +57,10 @@ class DashboardController extends GetxController
   void onClose() {
     animationController.dispose();
     super.onClose();
+  }
+
+  refreshView() {
+    onInit();
   }
 
   void simulateProcess() async {
@@ -335,6 +339,7 @@ class DashboardController extends GetxController
 
   Future<void> checkInternetStatus() async {
     try {
+      attendanceStatus.clear();
       var result = await DashboardService().checkInternetStatus();
       internetStatus(json.decode(result));
       internetStatus['dateTime'] = formatDate(internetStatus['dateTime']);
@@ -386,6 +391,7 @@ class DashboardController extends GetxController
   var markers = <Marker>[].obs;
   var circle = <Circle>[].obs;
   Future<void> getCurrentPosition() async {
+    currentPosition = null;
     final hasPermission = await _handleLocationPermission();
     if (hasPermission == false) {
       return;
@@ -412,9 +418,9 @@ class DashboardController extends GetxController
           Circle(
             circleId: CircleId(position.toString()),
             center: LatLng(position.latitude, position.longitude),
-            fillColor: Colors.redAccent,
+            fillColor: Color.fromARGB(61, 255, 82, 82),
             radius: 200,
-            strokeColor: const Color.fromARGB(255, 255, 68, 0),
+            strokeColor: Color.fromARGB(174, 175, 48, 1),
             strokeWidth: 2,
             visible: true,
             zIndex: 12,
@@ -445,8 +451,9 @@ class DashboardController extends GetxController
     });
   }
 
-  Future<void> setAttendance() async {
+  Future<void> setAttendance(context) async {
     try {
+      punchingInpregress.value = true;
       var attendanceDetails = {
         "address": currentAddress.toString(),
         "time": DateTime.now().toString(),
@@ -455,7 +462,12 @@ class DashboardController extends GetxController
       };
       var result = await DashboardService().setAttendance(attendanceDetails);
       attendanceStatus(json.decode(result));
-      print(attendanceStatus);
+      if (attendanceStatus.isNotEmpty &&
+          attendanceStatus['type'] == 'success') {
+        await Future.delayed(const Duration(seconds: 3));
+        punchingInpregress.value = false;
+        Navigator.pop(context, true);
+      }
     } catch (ex) {
       print("Exception in controller dashboard setAttendance: $ex");
     }

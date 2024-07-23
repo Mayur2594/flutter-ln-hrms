@@ -405,17 +405,7 @@ class FullScreenDialog extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: [
-            AppBar(
-              automaticallyImplyLeading: false,
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+            AppBar(),
             const Expanded(
               child: const Center(
                 child: const Text('This is a full screen dialog'),

@@ -7,7 +7,7 @@ import 'package:ln_hrms/helpers/helper.config.dart';
 class AppBarView extends StatelessWidget implements PreferredSizeWidget {
   final Config config = Config();
 
-  AppBarView();
+  AppBarView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +43,14 @@ class AppBarView extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class DrawerView extends StatelessWidget {
-  DrawerView();
-  void _onItemTapped(MenuItem _menuitem) {
-    Config().setPageTitle(_menuitem.title);
-    Get.toNamed(_menuitem.url);
+  const DrawerView({super.key});
+  void _onItemTapped(MenuItem menuitem) {
+    Config().setPageTitle(menuitem.title);
+    Get.toNamed(menuitem.url);
   }
 
   @override
@@ -100,7 +100,7 @@ class DrawerView extends StatelessWidget {
                       }).toList(),
                     );
                   }
-                }).toList(),
+                }),
               ],
             ),
           ),

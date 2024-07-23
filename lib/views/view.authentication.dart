@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:ln_hrms/controllers/controller.authentication.dart';
-import 'package:ln_hrms/controllers/controller.common.dart';
-import 'package:ln_hrms/main.dart';
-import 'package:ln_hrms/views/view.forgotpassword.dart';
 
 class PasssowrdFieldView extends StatelessWidget {
+  const PasssowrdFieldView({super.key});
+
   @override
   Widget build(BuildContext context) {
     // ignore: non_constant_identifier_names
@@ -45,6 +44,8 @@ class PasssowrdFieldView extends StatelessWidget {
 }
 
 class AuthenticationView extends StatelessWidget {
+  const AuthenticationView({super.key});
+
   @override
   Widget build(BuildContext context) {
     // ignore: non_constant_identifier_names
@@ -108,7 +109,7 @@ class AuthenticationView extends StatelessWidget {
                                   },
                                 ),
                                 const SizedBox(height: 20),
-                                PasssowrdFieldView(),
+                                const PasssowrdFieldView(),
                                 const SizedBox(height: 15),
                                 const Center(
                                   child: MaterialButton(

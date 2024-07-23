@@ -10,12 +10,12 @@ class DashboardService {
   final CommonController CommonCtrl = Get.put(CommonController());
 
   Future getDashboardDetails(var userDetails) async {
-    var _token = await CommonCtrl.getDetailsFromSharedPref("token");
+    var token = await CommonCtrl.getDetailsFromSharedPref("token");
 
     final response =
         await http.post(Uri.parse('${Config.baseUrl}/api/getDashboardDetails'),
             headers: {
-              'Authorization': 'Bearer $_token',
+              'Authorization': 'Bearer $token',
             },
             body: userDetails);
     if (response.statusCode == 200) {
@@ -27,12 +27,12 @@ class DashboardService {
   }
 
   Future getTopThreeEmployeesReview() async {
-    var _token = await CommonCtrl.getDetailsFromSharedPref("token");
+    var token = await CommonCtrl.getDetailsFromSharedPref("token");
 
     final response = await http.get(
       Uri.parse('${Config.baseUrl}/api/getTopThreeEmployeesReview'),
       headers: {
-        'Authorization': 'Bearer $_token',
+        'Authorization': 'Bearer $token',
       },
     );
     if (response.statusCode == 200) {
@@ -44,14 +44,48 @@ class DashboardService {
   }
 
   Future getBirthdaysInCurrentWeek() async {
-    var _token = await CommonCtrl.getDetailsFromSharedPref("token");
+    var token = await CommonCtrl.getDetailsFromSharedPref("token");
 
     final response = await http.get(
       Uri.parse('${Config.baseUrl}/api/getBirthdaysInCurrentWeek'),
       headers: {
-        'Authorization': 'Bearer $_token',
+        'Authorization': 'Bearer $token',
       },
     );
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return json.decode(
+          "{'status': false, 'message': 'Somthing went wrong, Please try Again!'}");
+    }
+  }
+
+  Future checkInternetStatus() async {
+    var token = await CommonCtrl.getDetailsFromSharedPref("token");
+
+    final response = await http.get(
+      Uri.parse('${Config.baseUrl}/api/checkInternetConnection'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return json.decode(
+          "{'status': false, 'message': 'Somthing went wrong, Please try Again!'}");
+    }
+  }
+
+  Future setAttendance(attendanceDetails) async {
+    var token = await CommonCtrl.getDetailsFromSharedPref("token");
+
+    final response =
+        await http.post(Uri.parse('${Config.baseUrl}/api/setAttendance'),
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+            body: attendanceDetails);
     if (response.statusCode == 200) {
       return response.body;
     } else {

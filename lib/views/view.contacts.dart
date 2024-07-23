@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ln_hrms/controllers/controller.contacts.dart';
 import 'package:ln_hrms/customwidgets/widget.applayout.dart';
-import 'package:ln_hrms/helpers/helper.config.dart';
 
 class ContactsView extends StatelessWidget {
+  const ContactsView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final ContactsController contactsCtrl = Get.find();
     return Scaffold(
       appBar: AppBarView(),
-      drawer: DrawerView(),
+      drawer: const DrawerView(),
       body: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -39,7 +40,7 @@ class ContactsView extends StatelessWidget {
               return ListView.separated(
                   // ignore: invalid_use_of_protected_member
                   itemCount: contactsCtrl.filteredContactsList.value.length,
-                  separatorBuilder: (context, index) => Divider(),
+                  separatorBuilder: (context, index) => const Divider(),
                   itemBuilder: (context, index) {
                     // ignore: invalid_use_of_protected_member
                     final item = contactsCtrl.filteredContactsList.value[index];

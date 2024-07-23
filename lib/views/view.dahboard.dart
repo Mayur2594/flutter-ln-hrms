@@ -1,11 +1,16 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import "package:ln_hrms/helpers/helper.config.dart";
 import 'package:ln_hrms/controllers/controller.dashboard.dart';
 import 'package:ln_hrms/customwidgets/widget.applayout.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class DashboardView extends StatelessWidget {
+  const DashboardView({super.key});
+
   // ignore: non_constant_identifier_names
   // final DashboardController DashboardCtrl = Get.put(DashboardController());
   @override
@@ -14,7 +19,7 @@ class DashboardView extends StatelessWidget {
     final DashboardController DashboardCtrl = Get.find();
     return Scaffold(
       appBar: AppBarView(),
-      drawer: DrawerView(),
+      drawer: const DrawerView(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -110,14 +115,14 @@ class DashboardView extends StatelessWidget {
                                                 height: 10,
                                                 color: data.color,
                                               ),
-                                              SizedBox(width: 5),
+                                              const SizedBox(width: 5),
                                               Text(
                                                 data.category,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge,
                                               ),
-                                              SizedBox(width: 5),
+                                              const SizedBox(width: 5),
                                               Text(
                                                 data.value.toString(),
                                                 style: Theme.of(context)
@@ -145,14 +150,14 @@ class DashboardView extends StatelessWidget {
                                                 height: 10,
                                                 color: data.color,
                                               ),
-                                              SizedBox(width: 5),
+                                              const SizedBox(width: 5),
                                               Text(
                                                 data.category,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge,
                                               ),
-                                              SizedBox(width: 5),
+                                              const SizedBox(width: 5),
                                               Text(
                                                 data.value.toString(),
                                                 style: Theme.of(context)
@@ -237,9 +242,10 @@ class DashboardView extends StatelessWidget {
                                             onPressed: () {
                                               showDialog(
                                                 context: context,
+                                                barrierDismissible: true,
                                                 builder:
                                                     (BuildContext context) {
-                                                  return FullScreenDialog();
+                                                  return const FullScreenDialog();
                                                 },
                                               );
                                             },
@@ -311,7 +317,7 @@ class DashboardView extends StatelessWidget {
                         ),
                       );
                     } else {
-                      return Column(
+                      return const Column(
                         children: [Text("No Records Found")],
                       );
                     }
@@ -394,9 +400,15 @@ class DashboardView extends StatelessWidget {
 }
 
 class FullScreenDialog extends StatelessWidget {
+  const FullScreenDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final DashboardController DashboardCtrl = Get.find();
+    DashboardCtrl.checkInternetStatus();
+    DashboardCtrl.getCurrentPosition();
     return Dialog(
+<<<<<<< HEAD
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.all(0),
       child: Container(
@@ -415,5 +427,230 @@ class FullScreenDialog extends StatelessWidget {
         ),
       ),
     );
+=======
+        backgroundColor: Colors.white,
+        insetPadding: const EdgeInsets.all(0),
+        child: Obx(
+          () => Center(
+            // width: MediaQuery.of(context).size.width,
+            // height: MediaQuery.of(context).size.height,
+            // color: Colors.white,
+
+            child: Column(
+              children: [
+                AppBar(
+                  title: const Text("Mark Attendance"),
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10.0),
+                    margin: const EdgeInsets.only(top: 20),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Date: ${DashboardCtrl.internetStatus['dateTime']}",
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              "Internet Status: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Icon(
+                              Icons.check_circle,
+                              color:
+                                  DashboardCtrl.internetStatus['status'] == 200
+                                      ? Colors.green
+                                      : Colors.red,
+                            ),
+                            Text(
+                              DashboardCtrl.internetStatus['status'] == 200
+                                  ? "ON"
+                                  : "OFF",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      DashboardCtrl.internetStatus['status'] ==
+                                              200
+                                          ? Colors.green
+                                          : Colors.red),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              "Location Service Status: ",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Icon(
+                              Icons.check_circle,
+                              color: DashboardCtrl.locationServiceStatus == true
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
+                            Text(
+                              DashboardCtrl.locationServiceStatus == true
+                                  ? "ON"
+                                  : "OFF",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: DashboardCtrl.locationServiceStatus ==
+                                          true
+                                      ? Colors.green
+                                      : Colors.red),
+                            ),
+                          ],
+                        ),
+                        const Divider(),
+                        const Row(
+                          children: [
+                            Text(
+                              "Address:",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Row(children: [
+                          Expanded(
+                              flex: 12,
+                              child: Text("${DashboardCtrl.currentAddress}")),
+                        ]),
+                        const Divider(),
+                        Container(
+                          height: 250,
+                          padding: const EdgeInsets.all(10.0),
+                          alignment: Alignment.center,
+                          child: DashboardCtrl.currentPosition != null
+                              ? GoogleMap(
+                                  mapType: MapType.terrain,
+                                  markers: DashboardCtrl.markers.toSet(),
+                                  circles: DashboardCtrl.circle.toSet(),
+                                  initialCameraPosition: CameraPosition(
+                                      zoom: 16,
+                                      target: LatLng(
+                                          DashboardCtrl
+                                              .currentPosition!.latitude,
+                                          DashboardCtrl
+                                              .currentPosition!.longitude)))
+                              : const Text("Something went wrong!"),
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: MaterialButton(
+                                onPressed: () {
+                                  DashboardCtrl.simulateProcess();
+                                },
+                                child: Row(
+                                  children: [
+                                    const Text(
+                                      "Retry ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFFFFA000),
+                                          fontSize: 18),
+                                    ),
+                                    DashboardCtrl.isProcesing.value == true
+                                        ? AnimatedBuilder(
+                                            builder: (context, child) {
+                                              return Transform.rotate(
+                                                angle: DashboardCtrl
+                                                        .animationController
+                                                        .value *
+                                                    2.0 *
+                                                    3.14159, // Rotate continuously
+                                                child: child,
+                                              );
+                                            },
+                                            animation: DashboardCtrl
+                                                .animationController,
+                                            child: const Icon(
+                                              Icons.refresh,
+                                              color: Color(0xFFFFA000),
+                                            ),
+                                          )
+                                        : const Icon(
+                                            Icons.refresh,
+                                            color: Color(0xFFFFA000),
+                                          )
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          child: DashboardCtrl.attendanceStatus != null
+                              ? Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 10,
+                                        child: Text(
+                                          "${DashboardCtrl.attendanceStatus['message']}",
+                                        ))
+                                  ],
+                                )
+                              : const SizedBox(
+                                  height: 0,
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        // borderRadius: BorderRadius.all(Radius.circular(20)),
+                        gradient: LinearGradient(colors: [
+                          Color(0xFF654ea3),
+                          Color(0xFFeaafc8),
+                        ]),
+                      ),
+                      child: MaterialButton(
+                        elevation: 6,
+                        onPressed: () {
+                          DashboardCtrl.setAttendance();
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 6.0, vertical: 6.0),
+                          child: Column(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Confirm",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(235, 255, 255, 255),
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ));
+>>>>>>> d945b0a7d053ea1efbe24d3b48c54f8829792be4
   }
 }

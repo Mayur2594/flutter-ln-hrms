@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ln_hrms/controllers/controller.contacts.dart';
 import 'package:ln_hrms/customwidgets/widget.applayout.dart';
+import 'package:ln_hrms/customwidgets/widget.shimmers.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ContactsView extends StatelessWidget {
   const ContactsView({super.key});
@@ -32,26 +34,31 @@ class ContactsView extends StatelessWidget {
           ),
           body: Obx(() {
             // ignore: invalid_use_of_protected_member
-            if (contactsCtrl.filteredContactsList.value.isEmpty) {
-              return const Column(
-                children: [Text("No Records Found")],
-              );
+            if (contactsCtrl.loadingContacts.value == true) {
+              return const ListShimmerLoader();
             } else {
-              return ListView.separated(
-                  // ignore: invalid_use_of_protected_member
-                  itemCount: contactsCtrl.filteredContactsList.value.length,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemBuilder: (context, index) {
+              if (contactsCtrl.filteredContactsList.value.isEmpty) {
+                return const Column(
+                  children: [Text("No Records Found")],
+                );
+              } else {
+                return ListView.separated(
                     // ignore: invalid_use_of_protected_member
-                    final item = contactsCtrl.filteredContactsList.value[index];
-                    return ListTile(
-                      leading: CircleAvatar(
-                          backgroundImage: NetworkImage(item['profile_pic'])),
-                      title: Text(item['name']),
-                      subtitle:
-                          Text(item['designation_name'] ?? "Not Available"),
-                    );
-                  });
+                    itemCount: contactsCtrl.filteredContactsList.value.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) {
+                      // ignore: invalid_use_of_protected_member
+                      final item =
+                          contactsCtrl.filteredContactsList.value[index];
+                      return ListTile(
+                        leading: CircleAvatar(
+                            backgroundImage: NetworkImage(item['profile_pic'])),
+                        title: Text(item['name']),
+                        subtitle:
+                            Text(item['designation_name'] ?? "Not Available"),
+                      );
+                    });
+              }
             }
           })),
     );

@@ -15,6 +15,17 @@ class AuthenticationService {
     }
   }
 
+  Future<Map<String, dynamic>> autoAuthenticate(var EmployeeDetails) async {
+    final response = await http.post(
+        Uri.parse('${Config.baseUrl}/api/autoAuthenticate'),
+        body: EmployeeDetails);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   Future<Map<String, dynamic>> authenticateUserWithUUID(
       var EmployeeDetails) async {
     final response = await http.post(

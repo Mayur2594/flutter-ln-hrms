@@ -1,9 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import "package:ln_hrms/helpers/helper.config.dart";
 import 'package:ln_hrms/controllers/controller.dashboard.dart';
 import 'package:ln_hrms/customwidgets/widget.applayout.dart';
+import 'package:ln_hrms/customwidgets/widget.shimmers.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -34,8 +35,8 @@ class DashboardView extends StatelessWidget {
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: Obx(() {
-                  if (DashboardCtrl.isLoading.value) {
-                    return const CircularProgressIndicator();
+                  if (DashboardCtrl.isLoading.value == true) {
+                    return DashboardShimmerLoader();
                   } else {
                     if (DashboardCtrl.dashbordDetails.isNotEmpty &&
                         DashboardCtrl.chartData.isNotEmpty) {
@@ -62,8 +63,23 @@ class DashboardView extends StatelessWidget {
                                             children: [
                                               CircleAvatar(
                                                 radius: 75,
-                                                backgroundImage: NetworkImage(
-                                                    "${Config.baseUrl}/${dsbDetails["_profilepic"]}"),
+                                                child: ClipOval(
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        "${Config.baseUrl}/${dsbDetails["_profilepic"]}",
+                                                    placeholder: (context,
+                                                            url) =>
+                                                        const CircularProgressIndicator(),
+                                                    errorWidget: (context, url,
+                                                            error) =>
+                                                        const Icon(Icons.error),
+                                                    width: 150.0,
+                                                    height: 150.0,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                // backgroundImage: NetworkImage(
+                                                //     ),
                                               ),
                                               SfCircularChart(
                                                 series: <CircularSeries>[
@@ -241,12 +257,15 @@ class DashboardView extends StatelessWidget {
                                             onPressed: () {
                                               showDialog(
                                                 context: context,
-                                                barrierDismissible: true,
+                                                barrierDismissible: false,
                                                 builder:
                                                     (BuildContext context) {
                                                   return const FullScreenDialog();
                                                 },
                                               ).then((_) {
+                                                DashboardCtrl.punchingInpregress
+                                                    .value = false;
+                                                ;
                                                 DashboardCtrl.refreshView();
                                               });
                                             },
@@ -499,11 +518,14 @@ class FullScreenDialog extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Row(children: [
-                          Expanded(
-                              flex: 12,
-                              child: Text("${DashboardCtrl.currentAddress}")),
-                        ]),
+                        DashboardCtrl.currentAddress != null
+                            ? Row(children: [
+                                Expanded(
+                                    flex: 12,
+                                    child: Text(
+                                        "${DashboardCtrl.currentAddress}")),
+                              ])
+                            : SingleLineShimmer(),
                         const Divider(),
                         Container(
                           height: 250,
@@ -511,7 +533,7 @@ class FullScreenDialog extends StatelessWidget {
                           alignment: Alignment.center,
                           child: DashboardCtrl.currentPosition != null
                               ? GoogleMap(
-                                  mapType: MapType.normal,
+                                  mapType: MapType.terrain,
                                   markers: DashboardCtrl.markers.toSet(),
                                   circles: DashboardCtrl.circle.toSet(),
                                   initialCameraPosition: CameraPosition(
@@ -521,7 +543,7 @@ class FullScreenDialog extends StatelessWidget {
                                               .currentPosition!.latitude,
                                           DashboardCtrl
                                               .currentPosition!.longitude)))
-                              : const Text("Map is loading...!"),
+                              : SingleBoxShimmer(),
                         ),
                         const Divider(),
                         Row(
@@ -587,7 +609,8 @@ class FullScreenDialog extends StatelessWidget {
                                                           'type'] ==
                                                       'success'
                                                   ? Colors.green
-                                                  : Colors.red),
+                                                  : Colors.red,
+                                              fontWeight: FontWeight.w900),
                                         ))
                                   ],
                                 )

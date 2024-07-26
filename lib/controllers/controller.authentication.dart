@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
 
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:device_uuid/device_uuid.dart';
@@ -36,7 +35,6 @@ class AuthenticationController extends GetxController {
   Future<void> getDeviceUUID() async {
     try {
       uuid.value = await _deviceUUID.getUUID() ?? 'Unknown UUID';
-      print("uuid: ${uuid.value}");
       if (uuid.value.toString().trim().isNotEmpty &&
           uuid.value.toString().trim() != 'Unknown UUID') {
         authenticateUserWithUUID();
@@ -53,7 +51,6 @@ class AuthenticationController extends GetxController {
       "password": passwordController.value.text,
       "uuid": uuid.value.toString()
     };
-    print(userDetails);
     var result =
         await AuthenticationService().authenticateEmployee(userDetails);
     data(result);
@@ -80,7 +77,6 @@ class AuthenticationController extends GetxController {
 
   authenticateUserWithUUID() async {
     var userDetails = {"uuid": uuid.value};
-    print("userDetails: $userDetails");
     var result =
         await AuthenticationService().authenticateUserWithUUID(userDetails);
     data(result);

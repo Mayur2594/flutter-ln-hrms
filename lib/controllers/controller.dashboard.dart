@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:ln_hrms/controllers/controller.common.dart';
@@ -11,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ln_hrms/helpers/helper.config.dart';
 import 'package:ln_hrms/services/service.dashboard.dart';
+import 'package:ln_hrms/services/service.common.dart';
 
 abstract class IChartData {
   String get category;
@@ -63,6 +65,7 @@ class DashboardController extends GetxController
     onInit();
   }
 
+  var counter = 0;
   void simulateProcess() async {
     isProcesing.value = true;
     animationController = AnimationController(
@@ -81,16 +84,19 @@ class DashboardController extends GetxController
 
   getLocalStorageDetails() async {
     try {
+      counter = 0;
+      isLoading.value = true;
       var savedDetails =
           await CommonCtrl.getDetailsFromSharedPref("userDetails");
       userDetails(json.decode(savedDetails.toString()));
       getDashboardDetails(userDetails['_id']);
       getTopThreeEmployeesReview();
       getBirthdaysInCurrentWeek();
+      Future.delayed(const Duration(seconds: 2)).then((value) {
+        isLoading.value = false;
+      });
     } catch (ex) {
       print("Exception in getLocalStorageDetails: $ex");
-    } finally {
-      isLoading.value = false;
     }
   }
 
@@ -113,6 +119,18 @@ class DashboardController extends GetxController
           'Loan Receipts',
           double.parse(dashbordDetails[0]['total_emi_paid'].toString()),
           const Color(0xFFC85C8E)));
+
+      if (userDetails['allow_bg_location'] == 1) {
+        if (dashbordDetails[0]["in_time"].toString().trim().isNotEmpty &&
+            dashbordDetails[0]["in_time"].toString().trim() != "--:--") {
+          if (dashbordDetails[0]["out_time"].toString().trim().isNotEmpty &&
+              dashbordDetails[0]["out_time"].toString().trim() != "--:--") {
+            commonService().stopBackgroundService();
+          } else {
+            commonService().initializeService();
+          }
+        }
+      }
     } catch (ex) {
       print("Exception in controller dasboard getDashboardDetails: $ex");
     }
@@ -333,6 +351,7 @@ class DashboardController extends GetxController
         }).toList(),
       );
     } else {
+      isLoading.value = false;
       return const Text("No Record Available");
     }
   }
@@ -462,8 +481,7 @@ class DashboardController extends GetxController
       };
       var result = await DashboardService().setAttendance(attendanceDetails);
       attendanceStatus(json.decode(result));
-      if (attendanceStatus.isNotEmpty &&
-          attendanceStatus['type'] == 'success') {
+      if (attendanceStatus.isNotEmpty) {
         await Future.delayed(const Duration(seconds: 3));
         punchingInpregress.value = false;
         Navigator.pop(context, true);

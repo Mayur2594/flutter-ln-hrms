@@ -5,6 +5,7 @@ import 'package:ln_hrms/services/service.employee.dart';
 class ContactsController extends GetxController {
   var contactsList = <dynamic>[].obs;
   var filteredContactsList = <dynamic>[].obs;
+  var loadingContacts = false.obs;
   @override
   void onInit() {
     officeContacts();
@@ -14,9 +15,11 @@ class ContactsController extends GetxController {
 
   officeContacts() async {
     try {
+      loadingContacts.value = true;
       var result = await EmployeeService().officeContacts();
       contactsList(json.decode(result));
       filteredContactsList.value = contactsList;
+      loadingContacts.value = false;
     } catch (ex) {
       print("Exception in controller dasboard officeContacts: $ex");
     }

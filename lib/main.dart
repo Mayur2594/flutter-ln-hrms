@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           elevation: 5, // Remove shadow if needed
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/dashboard',
       getPages: appPages,
     );
   }

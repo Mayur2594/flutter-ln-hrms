@@ -19,12 +19,22 @@ final List<GetPage> appPages = [
       page: () => const AuthenticationView(),
       binding: AuthenticationBinding()),
   // GetPage(name: '/MainScreen', page: () => MainScreen()),
-  GetPage(name: '/attenednace', page: () => const AttendanceView()),
-  GetPage(name: '/onduty', page: () => const OndutyView()),
-  GetPage(name: '/leaves', page: () => const LeaveView()),
+  GetPage(
+      name: '/attenednace',
+      page: () => const AttendanceView(),
+      binding: AttendanceBinding()),
+  GetPage(
+      name: '/onduty',
+      page: () => const OndutyView(),
+      binding: AttendanceBinding()),
+  GetPage(
+      name: '/leaves',
+      page: () => const LeaveView(),
+      binding: AttendanceBinding()),
   GetPage(
       name: '/attenednace-regularisation',
-      page: () => const AttendanceRegularisationView()),
+      page: () => const AttendanceRegularisationView(),
+      binding: AttendanceBinding()),
   GetPage(
       name: '/dashboard',
       page: () => const DashboardView(),
@@ -33,8 +43,14 @@ final List<GetPage> appPages = [
       name: '/contacts',
       page: () => const ContactsView(),
       binding: ContactsBinding()),
-  GetPage(name: '/salary', page: () => const SalaryView()),
-  GetPage(name: '/profile', page: () => const ProfileView()),
+  GetPage(
+      name: '/salary',
+      page: () => const SalaryView(),
+      binding: EmployeeBinding()),
+  GetPage(
+      name: '/profile',
+      page: () => const ProfileView(),
+      binding: EmployeeBinding()),
 ];
 
 final List<MenuItem> drawerMenuItems = [
@@ -59,7 +75,7 @@ final List<MenuItem> drawerMenuItems = [
     view: const AttendanceView(),
     subMenuItems: [
       MenuItem(
-        title: 'Att. Records',
+        title: 'Attendance Records',
         url: '/attenednace',
         icon: Icons.donut_large,
         description: 'View your Attendance Records',

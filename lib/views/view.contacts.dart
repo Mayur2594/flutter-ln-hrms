@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:ln_hrms/controllers/controller.contacts.dart';
 import 'package:ln_hrms/customwidgets/widget.applayout.dart';
 import 'package:ln_hrms/customwidgets/widget.shimmers.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ContactsView extends StatelessWidget {
   const ContactsView({super.key});

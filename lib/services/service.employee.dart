@@ -22,4 +22,21 @@ class EmployeeService {
           "{'status': false, 'message': 'Somthing went wrong, Please try Again!'}");
     }
   }
+
+  Future getEmployeesAttendanceList(var attFilter) async {
+    var token = await CommonCtrl.getDetailsFromSharedPref("token");
+
+    final response = await http.post(
+        Uri.parse('${Config.baseUrl}/api/getEmployeesAttendanceList'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        body: attFilter);
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return json.decode(
+          "{'status': false, 'message': 'Somthing went wrong, Please try Again!'}");
+    }
+  }
 }

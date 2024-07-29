@@ -20,389 +20,400 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       appBar: AppBarView(),
       drawer: const DrawerView(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Card.outlined(
-              // margin: const EdgeInsets.all(5), // Edge-to-edge
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0), // Edge-to-edge
-              ),
-              elevation: 6,
-              color: Colors.white,
-              shadowColor: Colors.white,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: Obx(() {
-                  if (DashboardCtrl.isLoading.value == true) {
-                    return DashboardShimmerLoader();
-                  } else {
-                    if (DashboardCtrl.dashbordDetails.isNotEmpty &&
-                        DashboardCtrl.chartData.isNotEmpty) {
-                      var dsbDetails = DashboardCtrl.dashbordDetails[0];
-                      return SizedBox(
-                        child: Container(
-                          child: SizedBox(
-                            child: Column(
-                              children: [
-                                Row(
+      body: RefreshIndicator(
+          onRefresh: () => DashboardCtrl.refreshView(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Card.outlined(
+                  // margin: const EdgeInsets.all(5), // Edge-to-edge
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0), // Edge-to-edge
+                  ),
+                  elevation: 6,
+                  color: Colors.white,
+                  shadowColor: Colors.white,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Obx(() {
+                      if (DashboardCtrl.isLoading.value == true) {
+                        return DashboardShimmerLoader();
+                      } else {
+                        if (DashboardCtrl.dashbordDetails.isNotEmpty &&
+                            DashboardCtrl.chartData.isNotEmpty) {
+                          var dsbDetails = DashboardCtrl.dashbordDetails[0];
+                          return SizedBox(
+                            child: Container(
+                              child: SizedBox(
+                                child: Column(
                                   children: [
-                                    Expanded(
-                                      flex: 12,
-                                      child: Container(
-                                        // padding: const EdgeInsets.all(8.0),
-                                        // decoration: BoxDecoration(
-                                        //   border: Border(
-                                        //     right: BorderSide(
-                                        //         color: Colors.grey.shade300),
-                                        //   ),
-                                        // ),
-                                        child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              CircleAvatar(
-                                                radius: 75,
-                                                child: ClipOval(
-                                                  child: CachedNetworkImage(
-                                                    imageUrl:
-                                                        "${Config.baseUrl}/${dsbDetails["_profilepic"]}",
-                                                    placeholder: (context,
-                                                            url) =>
-                                                        const CircularProgressIndicator(),
-                                                    errorWidget: (context, url,
-                                                            error) =>
-                                                        const Icon(Icons.error),
-                                                    width: 150.0,
-                                                    height: 150.0,
-                                                    fit: BoxFit.cover,
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 12,
+                                          child: Container(
+                                            // padding: const EdgeInsets.all(8.0),
+                                            // decoration: BoxDecoration(
+                                            //   border: Border(
+                                            //     right: BorderSide(
+                                            //         color: Colors.grey.shade300),
+                                            //   ),
+                                            // ),
+                                            child: Stack(
+                                                alignment: Alignment.center,
+                                                children: [
+                                                  CircleAvatar(
+                                                    radius: 75,
+                                                    child: ClipOval(
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            "${Config.baseUrl}/${dsbDetails["_profilepic"]}",
+                                                        placeholder: (context,
+                                                                url) =>
+                                                            const CircularProgressIndicator(),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                        width: 150.0,
+                                                        height: 150.0,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                    // backgroundImage: NetworkImage(
+                                                    //     ),
                                                   ),
-                                                ),
-                                                // backgroundImage: NetworkImage(
-                                                //     ),
-                                              ),
-                                              SfCircularChart(
-                                                series: <CircularSeries>[
-                                                  RadialBarSeries<ChartData,
-                                                      String>(
-                                                    dataSource:
-                                                        DashboardCtrl.chartData,
-                                                    xValueMapper:
-                                                        (ChartData data, _) =>
-                                                            data.category,
-                                                    yValueMapper:
-                                                        (ChartData data, _) =>
-                                                            data.value,
-                                                    pointColorMapper:
-                                                        (ChartData data, _) =>
-                                                            data.color,
-                                                    maximumValue: 100,
-                                                    innerRadius: '70%',
-                                                    gap: '15%',
-                                                    radius: '80%',
+                                                  SfCircularChart(
+                                                    series: <CircularSeries>[
+                                                      RadialBarSeries<ChartData,
+                                                          String>(
+                                                        dataSource:
+                                                            DashboardCtrl
+                                                                .chartData,
+                                                        xValueMapper:
+                                                            (ChartData data,
+                                                                    _) =>
+                                                                data.category,
+                                                        yValueMapper:
+                                                            (ChartData data,
+                                                                    _) =>
+                                                                data.value,
+                                                        pointColorMapper:
+                                                            (ChartData data,
+                                                                    _) =>
+                                                                data.color,
+                                                        maximumValue: 100,
+                                                        innerRadius: '70%',
+                                                        gap: '15%',
+                                                        radius: '80%',
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ]),
+                                            // child: Image.network(
+                                            //   "${Config.baseUrl}/${dsbDetails["_profilepic"]}",
+                                            //   fit: BoxFit.cover,
+                                            // ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: DashboardCtrl.chartData
+                                              .sublist(0, 1)
+                                              .map((data) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    width: 10,
+                                                    height: 10,
+                                                    color: data.color,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    data.category,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    data.value.toString(),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall,
                                                   ),
                                                 ],
                                               ),
-                                            ]),
-                                        // child: Image.network(
-                                        //   "${Config.baseUrl}/${dsbDetails["_profilepic"]}",
-                                        //   fit: BoxFit.cover,
-                                        // ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: DashboardCtrl.chartData
-                                          .sublist(0, 1)
-                                          .map((data) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                width: 10,
-                                                height: 10,
-                                                color: data.color,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                data.category,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                data.value.toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: DashboardCtrl.chartData
-                                          .sublist(1)
-                                          .map((data) {
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                width: 10,
-                                                height: 10,
-                                                color: data.color,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                data.category,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                data.value.toString(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineSmall,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                ),
-                                const Divider(),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 9,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8.0),
-                                        // decoration: BoxDecoration(
-                                        //   border: Border(
-                                        //     top: BorderSide(
-                                        //         color: Colors.grey.shade300),
-                                        //   ),
-                                        // ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "${DashboardCtrl.userDetails['name'] ?? ""}",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headlineSmall,
-                                            ),
-                                            Text(
-                                              "${DashboardCtrl.formatEmployeeId(DashboardCtrl.userDetails['_id'] ?? "")}",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelLarge
-                                                  ?.copyWith(
-                                                      color: Colors.grey),
-                                            ),
-                                            Text(
-                                              "${DashboardCtrl.userDetails['designationname'] ?? ""}",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelLarge
-                                                  ?.copyWith(
-                                                      color: Colors.grey),
-                                            ),
-                                            Text(
-                                              'Shift: ${DashboardCtrl.dashbordDetails[0]["working_shift"] ?? ""}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelLarge
-                                                  ?.copyWith(
-                                                      color: Colors.grey),
-                                            ),
-                                            Text(
-                                              'Manager: ${DashboardCtrl.dashbordDetails[0]["manager_name"] ?? "Not Assinged"}',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .labelLarge
-                                                  ?.copyWith(
-                                                      color: Colors.grey),
-                                            ),
-                                          ],
+                                            );
+                                          }).toList(),
                                         ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Container(
-                                          decoration: const BoxDecoration(
-                                              border: BorderDirectional(
-                                                  start: BorderSide(
-                                                      color: Colors.grey,
-                                                      width: 1))),
-                                          child: MaterialButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                context: context,
-                                                barrierDismissible: false,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return const FullScreenDialog();
-                                                },
-                                              ).then((_) {
-                                                DashboardCtrl.punchingInpregress
-                                                    .value = false;
-                                                ;
-                                                DashboardCtrl.refreshView();
-                                              });
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Image.asset(
-                                                  'lib/assets/gif/fingerprint.gif',
-                                                  fit: BoxFit.cover,
-                                                ),
-                                                Text('PUNCH',
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: DashboardCtrl.chartData
+                                              .sublist(1)
+                                              .map((data) {
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              child: Column(
+                                                children: [
+                                                  Container(
+                                                    width: 10,
+                                                    height: 10,
+                                                    color: data.color,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    data.category,
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .bodyMedium),
+                                                        .bodyLarge,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    data.value.toString(),
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall,
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 9,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8.0),
+                                            // decoration: BoxDecoration(
+                                            //   border: Border(
+                                            //     top: BorderSide(
+                                            //         color: Colors.grey.shade300),
+                                            //   ),
+                                            // ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "${DashboardCtrl.userDetails['name'] ?? ""}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineSmall,
+                                                ),
+                                                Text(
+                                                  "${DashboardCtrl.formatEmployeeId(DashboardCtrl.userDetails['_id'] ?? "")}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge
+                                                      ?.copyWith(
+                                                          color: Colors.grey),
+                                                ),
+                                                Text(
+                                                  "${DashboardCtrl.userDetails['designationname'] ?? ""}",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge
+                                                      ?.copyWith(
+                                                          color: Colors.grey),
+                                                ),
+                                                Text(
+                                                  'Shift: ${DashboardCtrl.dashbordDetails[0]["working_shift"] ?? ""}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge
+                                                      ?.copyWith(
+                                                          color: Colors.grey),
+                                                ),
+                                                Text(
+                                                  'Manager: ${DashboardCtrl.dashbordDetails[0]["manager_name"] ?? "Not Assinged"}',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelLarge
+                                                      ?.copyWith(
+                                                          color: Colors.grey),
+                                                ),
                                               ],
                                             ),
-                                          )),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Container(
+                                              decoration: const BoxDecoration(
+                                                  border: BorderDirectional(
+                                                      start: BorderSide(
+                                                          color: Colors.grey,
+                                                          width: 1))),
+                                              child: MaterialButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return const FullScreenDialog();
+                                                    },
+                                                  ).then((_) {
+                                                    DashboardCtrl
+                                                        .punchingInpregress
+                                                        .value = false;
+                                                    ;
+                                                    DashboardCtrl.refreshView();
+                                                  });
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    Image.asset(
+                                                      'lib/assets/gif/fingerprint.gif',
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    Text('PUNCH',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium),
+                                                  ],
+                                                ),
+                                              )),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                const Divider(),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 12,
-                                      child: Column(
-                                        children: [
-                                          Row(
+                                    const Divider(),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 12,
+                                          child: Column(
                                             children: [
-                                              Expanded(
-                                                flex: 6,
-                                                child: Column(
-                                                  children: [
-                                                    _buildDetailItem('In/Out',
-                                                        '${DashboardCtrl.dashbordDetails[0]["in_time"] ?? ""}/${DashboardCtrl.dashbordDetails[0]["out_time"] ?? ""}'),
-                                                    _buildDetailItem('Days',
-                                                        '${DashboardCtrl.dashbordDetails[0]["prest_days_count"] ?? ""}/${DashboardCtrl.dashbordDetails[0]["no_days"] ?? ""}'),
-                                                  ],
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 6,
-                                                child: Column(
-                                                  children: [
-                                                    _buildDetailItem(
-                                                        'Last Punch',
-                                                        DashboardCtrl.dashbordDetails[
-                                                                    0][
-                                                                "last_punch"] ??
-                                                            ""),
-                                                    _buildDetailItem(
-                                                        'Salary',
-                                                        DashboardCtrl.dashbordDetails[
-                                                                    0][
-                                                                "salary_date"] ??
-                                                            ""),
-                                                  ],
-                                                ),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 6,
+                                                    child: Column(
+                                                      children: [
+                                                        _buildDetailItem(
+                                                            'In/Out',
+                                                            '${DashboardCtrl.dashbordDetails[0]["in_time"] ?? ""}/${DashboardCtrl.dashbordDetails[0]["out_time"] ?? ""}'),
+                                                        _buildDetailItem('Days',
+                                                            '${DashboardCtrl.dashbordDetails[0]["prest_days_count"] ?? ""}/${DashboardCtrl.dashbordDetails[0]["no_days"] ?? ""}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 6,
+                                                    child: Column(
+                                                      children: [
+                                                        _buildDetailItem(
+                                                            'Last Punch',
+                                                            DashboardCtrl.dashbordDetails[
+                                                                        0][
+                                                                    "last_punch"] ??
+                                                                ""),
+                                                        _buildDetailItem(
+                                                            'Salary',
+                                                            DashboardCtrl.dashbordDetails[
+                                                                        0][
+                                                                    "salary_date"] ??
+                                                                ""),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return const Column(
-                        children: [Text("No Records Found")],
-                      );
-                    }
-                  }
-                }),
-              ),
+                          );
+                        } else {
+                          return const Column(
+                            children: [Text("No Records Found")],
+                          );
+                        }
+                      }
+                    }),
+                  ),
+                ),
+                Card.outlined(
+                    margin: const EdgeInsets.all(5), // Edge-to-edge
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0), // Edge-to-edge
+                    ),
+                    elevation: 6,
+                    color: Colors.white,
+                    shadowColor: Colors.white,
+                    child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Employee(s) of the month",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              textAlign: TextAlign.start,
+                            ),
+                            Obx(
+                              () {
+                                return Container(
+                                  child: DashboardCtrl.topEmployeeWidget.value,
+                                );
+                              },
+                            )
+                          ],
+                        ))),
+                Card.outlined(
+                    margin: const EdgeInsets.all(5), // Edge-to-edge
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0), // Edge-to-edge
+                    ),
+                    elevation: 6,
+                    color: Colors.white,
+                    shadowColor: Colors.white,
+                    child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Birthday(s) in week",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              textAlign: TextAlign.start,
+                            ),
+                            Obx(
+                              () {
+                                return Container(
+                                  child: DashboardCtrl
+                                      .EmployeeBirthdaysWidget.value,
+                                );
+                              },
+                            )
+                          ],
+                        ))),
+              ],
             ),
-            Card.outlined(
-                margin: const EdgeInsets.all(5), // Edge-to-edge
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0), // Edge-to-edge
-                ),
-                elevation: 6,
-                color: Colors.white,
-                shadowColor: Colors.white,
-                child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Employee(s) of the month",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          textAlign: TextAlign.start,
-                        ),
-                        Obx(
-                          () {
-                            return Container(
-                              child: DashboardCtrl.topEmployeeWidget.value,
-                            );
-                          },
-                        )
-                      ],
-                    ))),
-            Card.outlined(
-                margin: const EdgeInsets.all(5), // Edge-to-edge
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0), // Edge-to-edge
-                ),
-                elevation: 6,
-                color: Colors.white,
-                shadowColor: Colors.white,
-                child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Birthday(s) in week",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          textAlign: TextAlign.start,
-                        ),
-                        Obx(
-                          () {
-                            return Container(
-                              child:
-                                  DashboardCtrl.EmployeeBirthdaysWidget.value,
-                            );
-                          },
-                        )
-                      ],
-                    ))),
-          ],
-        ),
-      ),
+          )),
     );
   }
 

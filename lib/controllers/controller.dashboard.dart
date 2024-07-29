@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:ln_hrms/controllers/controller.common.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:device_uuid/device_uuid.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +14,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ln_hrms/helpers/helper.config.dart';
 import 'package:ln_hrms/services/service.dashboard.dart';
 import 'package:ln_hrms/services/service.common.dart';
+import 'package:ln_hrms/services/service.authentication.dart';
 
 abstract class IChartData {
   String get category;
@@ -61,8 +63,8 @@ class DashboardController extends GetxController
     super.onClose();
   }
 
-  refreshView() {
-    onInit();
+  Future<void> refreshView() async {
+    getDashboardDetails(userDetails['_id']);
   }
 
   var counter = 0;
@@ -90,13 +92,52 @@ class DashboardController extends GetxController
           await CommonCtrl.getDetailsFromSharedPref("userDetails");
       userDetails(json.decode(savedDetails.toString()));
       getDashboardDetails(userDetails['_id']);
-      getTopThreeEmployeesReview();
-      getBirthdaysInCurrentWeek();
       Future.delayed(const Duration(seconds: 2)).then((value) {
         isLoading.value = false;
       });
     } catch (ex) {
       print("Exception in getLocalStorageDetails: $ex");
+      getDeviceUUID();
+    }
+  }
+
+  var uuid = ''.obs;
+  final _deviceUUID = DeviceUuid();
+
+  Future<void> getDeviceUUID() async {
+    try {
+      uuid.value = await _deviceUUID.getUUID() ?? 'Unknown UUID';
+      if (uuid.value.toString().trim().isNotEmpty &&
+          uuid.value.toString().trim() != 'Unknown UUID') {
+        authenticateUserWithUUID();
+      }
+    } catch (ex, StackTrace) {
+      print("Exception in getting UUID: $ex");
+      print("StackTrace in getting UUID: $StackTrace");
+    }
+  }
+
+  var data = {}.obs;
+
+  authenticateUserWithUUID() async {
+    var userDetails = {"uuid": uuid.value};
+    var result =
+        await AuthenticationService().authenticateUserWithUUID(userDetails);
+    data(result);
+    // ignore: collection_methods_unrelated_type
+    if (data['success'] == true) {
+      await CommonCtrl.saveDetailsInSharedPref("token", data['token']);
+      await CommonCtrl.saveDetailsInSharedPref("userDetails", {
+        "rolename": data["rolename"],
+        "designationname": data["designationname"],
+        "allow_bg_location": data["allow_bg_location"],
+        "name": data["name"],
+        "_id": data["_id"]
+      });
+
+      getLocalStorageDetails();
+    } else {
+      Get.toNamed('/');
     }
   }
 
@@ -104,31 +145,40 @@ class DashboardController extends GetxController
     try {
       var result = await DashboardService()
           .getDashboardDetails({"userId": userId.toString()});
-      dashbordDetails(json.decode(result));
+      var data = json.decode(result);
 
-      chartData = [];
-      chartData.add(ChartData(
-          'Leaves',
-          double.parse(dashbordDetails[0]['total_leaves'].toString()),
-          const Color(0xFF7B2869)));
-      chartData.add(ChartData(
-          'Loan Amount',
-          double.parse(dashbordDetails[0]['total_loan_amt'].toString()),
-          const Color(0xFF9D3C72)));
-      chartData.add(ChartData(
-          'Loan Receipts',
-          double.parse(dashbordDetails[0]['total_emi_paid'].toString()),
-          const Color(0xFFC85C8E)));
+      if (data is List && data.length > 0) {
+        dashbordDetails(data);
+        chartData = [];
+        chartData.add(ChartData(
+            'Leaves',
+            double.parse(dashbordDetails[0]['total_leaves'].toString()),
+            const Color(0xFF7B2869)));
+        chartData.add(ChartData(
+            'Loan Amount',
+            double.parse(dashbordDetails[0]['total_loan_amt'].toString()),
+            const Color(0xFF9D3C72)));
+        chartData.add(ChartData(
+            'Loan Receipts',
+            double.parse(dashbordDetails[0]['total_emi_paid'].toString()),
+            const Color(0xFFC85C8E)));
 
-      if (userDetails['allow_bg_location'] == 1) {
-        if (dashbordDetails[0]["in_time"].toString().trim().isNotEmpty &&
-            dashbordDetails[0]["in_time"].toString().trim() != "--:--") {
-          if (dashbordDetails[0]["out_time"].toString().trim().isNotEmpty &&
-              dashbordDetails[0]["out_time"].toString().trim() != "--:--") {
-            commonService().stopBackgroundService();
-          } else {
-            commonService().initializeService();
+        if (userDetails['allow_bg_location'] == 1) {
+          if (dashbordDetails[0]["in_time"].toString().trim().isNotEmpty &&
+              dashbordDetails[0]["in_time"].toString().trim() != "--:--") {
+            if (dashbordDetails[0]["out_time"].toString().trim().isNotEmpty &&
+                dashbordDetails[0]["out_time"].toString().trim() != "--:--") {
+              commonService().stopBackgroundService();
+            } else {
+              commonService().initializeService();
+            }
           }
+        }
+        getTopThreeEmployeesReview();
+        getBirthdaysInCurrentWeek();
+      } else {
+        if (data['success'] == false) {
+          getDeviceUUID();
         }
       }
     } catch (ex) {

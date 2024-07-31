@@ -10,7 +10,7 @@ class AttendanceController extends GetxController {
   var selectedMonth = 0.obs;
   var selectedYear = 0.obs;
 
-  final _months = [
+  final monthsList = [
     {
       "text": 'January',
       "value": 'January',
@@ -82,7 +82,7 @@ class AttendanceController extends GetxController {
     try {
       if (selectedYr.toString().trim().isNotEmpty && selectedMonthindex >= 0) {
         var selectedDate =
-            "${_months[selectedMonthindex]["value"]!}-${selectedYr.toString().trim()}";
+            "${monthsList[selectedMonthindex]["value"]!}-${selectedYr.toString().trim()}";
         loadingContacts.value = true;
         var result = await EmployeeService().getEmployeesAttendanceList({
           "employee_id": DashboardCtrl.userDetails['_id'].toString(),

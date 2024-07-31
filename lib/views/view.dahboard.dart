@@ -17,6 +17,7 @@ class DashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: non_constant_identifier_names
     final DashboardController DashboardCtrl = Get.find();
+    DashboardCtrl.getLocalStorageDetails();
     return Scaffold(
       appBar: AppBarView(),
       drawer: const DrawerView(),

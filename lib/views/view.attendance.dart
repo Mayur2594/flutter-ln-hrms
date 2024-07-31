@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ln_hrms/customwidgets/widget.applayout.dart';
@@ -70,101 +72,144 @@ class AttendanceView extends StatelessWidget {
                                       )
                                     ],
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                  Column(
                                     children: [
-                                      Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            0.0, 0, 12.0, 0),
-                                        alignment: Alignment.topCenter,
-                                        child: Column(
-                                          children: [
-                                            const Text(
-                                              "In Time",
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0.0, 0, 12.0, 0),
+                                            alignment: Alignment.topCenter,
+                                            child: Column(
+                                              children: [
+                                                const Text(
+                                                  "In Time",
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                Text(
+                                                  item['in_time'],
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                )
+                                              ],
                                             ),
-                                            Text(
-                                              item['in_time'],
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w400),
-                                            )
-                                          ],
-                                        ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                12.0, 0, 12.0, 0),
+                                            alignment: Alignment.topCenter,
+                                            child: Column(
+                                              children: [
+                                                const Text(
+                                                  "Out Time",
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                Text(
+                                                  item['out_time'],
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                12.0, 0, 12.0, 0),
+                                            alignment: Alignment.topCenter,
+                                            child: Column(
+                                              children: [
+                                                const Text(
+                                                  "Late Time",
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                Text(
+                                                  attendanceCtrl
+                                                      .getTimeDifference(item),
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            child: PopupMenuButton<String>(
+                                              icon: const Icon(Icons
+                                                  .more_vert), // The icon that triggers the menu
+                                              onSelected: (String result) {
+                                                // Handle the selected value
+                                                print('Selected: $result');
+                                              },
+                                              itemBuilder:
+                                                  (BuildContext context) =>
+                                                      <PopupMenuEntry<String>>[
+                                                const PopupMenuItem<String>(
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons
+                                                          .visibility_outlined),
+                                                      Text(" View Details")
+                                                    ],
+                                                  ),
+                                                ),
+                                                const PopupMenuItem<String>(
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.update),
+                                                      Text(
+                                                          " Attendnce Regularise")
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
                                       ),
                                       Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            12.0, 0, 12.0, 0),
-                                        alignment: Alignment.topCenter,
-                                        child: Column(
-                                          children: [
-                                            const Text(
-                                              "Out Time",
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            Text(
-                                              item['out_time'],
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w400),
-                                            )
-                                          ],
+                                        alignment: Alignment.topLeft,
+                                        decoration: const BoxDecoration(
+                                          border: BorderDirectional(
+                                              top: BorderSide(
+                                                  width: .5,
+                                                  color: Colors.black45)),
                                         ),
-                                      ),
-                                      Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            12.0, 0, 12.0, 0),
-                                        alignment: Alignment.topCenter,
-                                        child: Column(
-                                          children: [
-                                            const Text(
-                                              "Late Time",
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            Text(
-                                              attendanceCtrl
-                                                  .getTimeDifference(item),
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w400),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                        child: PopupMenuButton<String>(
-                                          icon: const Icon(Icons
-                                              .more_vert), // The icon that triggers the menu
-                                          onSelected: (String result) {
-                                            // Handle the selected value
-                                            print('Selected: $result');
-                                          },
-                                          itemBuilder: (BuildContext context) =>
-                                              <PopupMenuEntry<String>>[
-                                            const PopupMenuItem<String>(
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons
-                                                      .visibility_outlined),
-                                                  Text(" View Details")
-                                                ],
-                                              ),
-                                            ),
-                                            const PopupMenuItem<String>(
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.update),
-                                                  Text(" Attendnce Regularise")
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                        child: item['regularisation_approval_status']
+                                                        .toString()
+                                                        .trim() !=
+                                                    "" &&
+                                                item['regularisation_approval_status']
+                                                        .toString()
+                                                        .trim() !=
+                                                    'null'
+                                            ? Text(
+                                                "Applied for attendance regularisation (${item['regularisation_approval_status'] == 0 ? "Pending" : item['regularisation_approval_status'] == 1 ? "Approved" : item['regularisation_approval_status'] == 2 ? "Denied" : ""})",
+                                                style: TextStyle(
+                                                    color: item['regularisation_approval_status'] ==
+                                                            0
+                                                        ? Colors.amber
+                                                        : item['regularisation_approval_status'] ==
+                                                                1
+                                                            ? Colors.green
+                                                            : item['regularisation_approval_status'] ==
+                                                                    2
+                                                                ? Colors.red
+                                                                : null),
+                                              )
+                                            : null,
                                       )
                                     ],
                                   ),
-                                  Expanded(child: Text("Sample Text"))
                                 ],
                               ),
                             );

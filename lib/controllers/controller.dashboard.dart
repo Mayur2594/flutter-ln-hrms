@@ -64,7 +64,7 @@ class DashboardController extends GetxController
   }
 
   Future<void> refreshView() async {
-    getDashboardDetails(userDetails['_id']);
+    onInit();
   }
 
   var counter = 0;

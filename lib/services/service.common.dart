@@ -13,6 +13,26 @@ import 'package:geolocator/geolocator.dart';
 class commonService {
   final CommonController CommonCtrl = Get.put(CommonController());
 
+  late FlutterLocalNotificationsPlugin flutterLocalNotification =
+      FlutterLocalNotificationsPlugin();
+  static AndroidNotificationDetails androidSettings =
+      const AndroidNotificationDetails("channelId", "channelName",
+          playSound: true,
+          enableVibration: true,
+          importance: Importance.max,
+          priority: Priority.max);
+
+  LocalNotificationinitializer() {
+    androidSettings; //for logo
+    var initializationSettings = new InitializationSettings();
+    flutterLocalNotification.initialize(initializationSettings);
+  }
+
+  showNotification(var title, var body) async {
+    var notifDetails = NotificationDetails(android: androidSettings);
+    flutterLocalNotification.show(1, '$title', '$body', notifDetails);
+  }
+
   initializeService() async {
     print("Inside Service-------");
     final service = FlutterBackgroundService();
@@ -51,10 +71,10 @@ class commonService {
         // auto start service
         autoStart: true,
         isForegroundMode: true,
-        notificationChannelId: '',
+        notificationChannelId: 'bg-notification',
         initialNotificationTitle: 'Ln-HRMS',
         initialNotificationContent: 'Initializing Service',
-        foregroundServiceNotificationId: 888,
+        foregroundServiceNotificationId: 2,
       ),
       iosConfiguration: IosConfiguration(
         // auto start service
@@ -66,7 +86,7 @@ class commonService {
   }
 
   @pragma('vm:entry-point')
-  void onStart(ServiceInstance service) async {
+  static onStart(ServiceInstance service) async {
     // Only available for flutter 3.0.0 and later
     DartPluginRegistrant.ensureInitialized();
 
@@ -84,12 +104,15 @@ class commonService {
       service.stopSelf();
     });
 
+    commonService().LocalNotificationinitializer();
+    commonService().showNotification("Ln-hrms", "Welcome");
+
     // bring to foreground
     print('before periodic');
     Timer.periodic(const Duration(minutes: 5), (timer) async {
       if (service is AndroidServiceInstance) {
         if (await service.isForegroundService()) {
-          getCurrentPosition();
+          commonService().getCurrentPosition();
         }
       }
     });
